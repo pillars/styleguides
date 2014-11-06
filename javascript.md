@@ -133,7 +133,7 @@ When programmatically building up a string, use `Array#join` instead of string c
 
 ```javascript
 // bad
-function inbox(messages) {
+function inbox (messages) {
   items = '<ul>';
   for (i = 0; i < length; i++) {
     items += '<li>' + messages[i].message + '</li>';
@@ -142,7 +142,7 @@ function inbox(messages) {
 }
 
 // good
-function inbox(messages) {
+function inbox (messages) {
   items = [];
   for (i = 0; i < length; i++) {
     items[i] = messages[i].message;
@@ -275,7 +275,7 @@ Assign variables at the top of their scope. This helps avoid issues with variabl
 
 ```javascript
 // bad
-function() {
+function () {
   console.log('doing stuff..');
   var name = getName();
   if (name === 'test') {
@@ -285,7 +285,7 @@ function() {
 }
 
 // good
-function() {
+function () {
   var name = getName();
   console.log('doing stuff..');
   if (name === 'test') {
@@ -295,7 +295,7 @@ function() {
 }
 
 // bad
-function() {
+function () {
   var name = getName();
   if (!arguments.length) {
     return false;
@@ -304,7 +304,7 @@ function() {
 }
 
 // good
-function() {
+function () {
   if (!arguments.length) {
     return false;
   }
@@ -315,15 +315,17 @@ function() {
 
 ### Naming
 
-Name variable in english:
+Name variables in American English:
 
 ```javascript
 // bad
 заплата = 1000;
 salaire = 1000;
+colour = '#39ace6';
 
 // good
 salary = 1000;
+color = '#39ace6';
 ```
 
 Do not use obscure, abstract, abreviated, single letter variable names. Be explicit, clear and concise. Do not use the variable type in the name:
@@ -340,10 +342,12 @@ var dog = 'gy style';
 var dogs = [];
 ```
 
+Several exceptions exist.  When something is conventionally abbreviated (as `req` and `res` often are in web frameworks), it's ok to continue with that convention.  `args` is an acceptable, universally understood abbreviation that stands alone.  As long as you're doing *very* simple loops, `i` is an acceptable shortened version of index.
+
 ### Case
 
-- `camelCase`: Naming functions, methods, variables, objects, instances, etc
-- `PascalCase`: Naming constructors, prototypes, etc
+- `camelCase`: Naming functions, methods, variables, objects, instances, etc.
+- `PascalCase`: Naming constructors, prototypes, etc.
 - `rDesc`: Naming regular expressions
 - `SYMBOLIC_CONSTANTS`: Naming constant
 
