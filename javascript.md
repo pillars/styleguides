@@ -1,15 +1,30 @@
-# Javascript Styleguide
+# Javascript Style Guide
 
 All code in any code-base should look like a single person typed it, no matter how many people contributed.
 
 > "Arguments over style are pointless. There should be a style guide, and you  should follow it"
 > Rebecca Murphey
 
-## Credit
+This guide is inspired by those guides:
 
 - https://github.com/rwaldron/idiomatic.js/
 - https://github.com/bevacqua/js
 - https://github.com/airbnb/javascript
+
+## Table of Contents
+
+- [Convention](#conventions)
+- [Strings](#strings)
+- [Comments](#comments)
+- [Regex](#regexes)
+- [Variables](#variables)
+- [Functions](#functions)
+- [Conditionals](#conditionals)
+- [Arrays](#arrays)
+- [Objects](#objects)
+- [Loops](#loops)
+
+---
 
 ## Conventions
 
@@ -114,7 +129,7 @@ var errorMessage = [
 ].join('');
 ```
 
-When programmatically building up a string, use Array#join instead of string concatenation. Mostly for IE: [jsPerf](http://jsperf.com/string-vs-array-concat/2).
+When programmatically building up a string, use `Array#join` instead of string concatenation. Mostly for IE: [jsPerf](http://jsperf.com/string-vs-array-concat/2).
 
 ```javascript
 // bad
@@ -199,7 +214,7 @@ The authorized verbs are:
 
 ---
 
-## Regex
+## Regexes
 
 Prefix regex variable names with a `r`:
 
@@ -906,7 +921,7 @@ itemsCopy = items.slice();
 
 ---
 
-## Hashes
+## Objects
 
 Remove trailing comma at the end of the hash. Avoid declaring single line hashes if it has more than one property. If you do, use spaces after the opening `{` and before the closing `}`:
 
@@ -979,23 +994,3 @@ for(var i=0; i<100; i++) {
 ```
 
 
----
-
-## Tools
-
-### Linter and style checking
-
-TODO
-
-### EditorConfig
-
-You are highly encouraged to install [EditorConfig](http://editorconfig.org/) in your editor of choice. It will take care of properly configuring your editor for the project you are working on.
-
-### Sublime configuration
-
-Set your editor to display a line at 80 characters:
-
-```json
-// add to your config file
-"rulers": [80]
-```
