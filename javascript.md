@@ -991,7 +991,7 @@ for(var i=0;i<100;i++) someIterativeFn();
 while (condition) {
   iterating++;
 }
-for(var i=0; i<100; i++) {
+for (var i=0; i<100; i++) {
   someIterativeFn();
 }
 
