@@ -43,7 +43,9 @@ Always put `'use strict';` at the top of your file. Strict mode allows you to ca
 
 #### Line spaces
 
-Use a **single** space line between the module definition and its methods. Use a **single** space line between methods. Avoid using any space at all inside a method (if it is too long, maybe you should rethink what it does).
+Use a **single** space line between the module definition and its methods.
+Use a **single** space line between methods. Avoid using any space at all
+inside a method (if it is too long, maybe you should rethink what it does).
 
 ```javascript
 module.exports = {
@@ -53,7 +55,7 @@ module.exports = {
       reply(pages);
     });
   },
-  
+
   getPageById: function (request, reply) {
     Page.getPageById(request.params.pageId, function (page) {
       if (!page) {
@@ -82,7 +84,9 @@ var x = y + 5;
 
 ### Quotes
 
-Always use single quotes `'`. Do not use double quotes `"`.
+Always use single quotes `'`. Do not use double quotes `"` unless you're dealing
+with long text and it becomes impractical to use single quotes. (If you
+encounter this situation, maybe you should be doing something differently.)
 
 ```javascript
 // bad
@@ -98,7 +102,9 @@ message = 'Hello ' + name + '!';
 
 ### Multiline strings
 
- If overused, long strings with concatenation could impact performance. [jsPerf](http://jsperf.com/ya-string-concat) & [Discussion](https://github.com/airbnb/javascript/issues/40)
+If overused, long strings with concatenation could impact performance.
+[jsPerf](http://jsperf.com/ya-string-concat) &
+[Discussion](https://github.com/airbnb/javascript/issues/40)
 
 ```javascript
 // bad
@@ -116,7 +122,7 @@ var errorMessage = 'This is a super long error that was thrown because ' +
   'with this, you would get nowhere fast.';
 
 // good
-var errorMessage = 
+var errorMessage =
   'This is a super long error that was thrown because ' +
   'of Batman. When you stop to think about how Batman had anything to do ' +
   'with this, you would get nowhere fast.';
@@ -171,11 +177,11 @@ p.text('foo');
 ```javascript
 // the megaphone periodically emits updates for container
 megaphone.on('data', function (value) {
-  container.text(value); 
+  container.text(value);
 });
 
 // one or more digits somewhere in the string
-var numeric = /\d+/;
+var numericRegex = /\d+/;
 ```
 
 Comments are positionned before the code that it comments, on its own line:
@@ -183,14 +189,14 @@ Comments are positionned before the code that it comments, on its own line:
 **Bad**
 
 ```javascript
-var numeric = /\d+/; // one or more digits somewhere in the string
+var numericRegex = /\d+/; // one or more digits somewhere in the string
 ```
 
 **Good**
 
 ```javascript
 // one or more digits somewhere in the string
-var numeric = /\d+/;
+var numericRegex = /\d+/;
 ```
 
 Commenting out entire blocks of code should be avoided entirely, that's why you have version control systems in place!
@@ -216,14 +222,14 @@ The authorized verbs are:
 
 ## Regexes
 
-Prefix regex variable names with a `r`:
+Postfix regex variable names with `Regex`:
 
 ```javascript
 // bad
 var numeric = /\d+/;
 
 // good
-var rNumeric = /\d+/;
+var numericRegex = /\d+/;
 
 ```
 
@@ -236,8 +242,8 @@ if (/\d+/.test(text)) {
 }
 
 // good
-var rNumeric = /\d+/;
-if (rNumeric.test(text)) {
+var numericRegex = /\d+/;
+if (numericRegex.test(text)) {
   console.log('so many numbers!');
 }
 ```
@@ -248,7 +254,7 @@ if (rNumeric.test(text)) {
 
 ### Variables definition
 
-One variable per line. Repeat the `var` keyword on every line. Align the `=` operators. 
+One variable per line. Repeat the `var` keyword on every line. Align the `=` operators.
 
 ```javascript
 // bad - not repeating the var
@@ -259,7 +265,7 @@ var firstVariable = 1,
 var firstVariable = 1
   , secondVariable = 2;
 
-// bad - = operators not aligned
+// bad - = operators not aligned when listing variables in sequential lines
 var firstVariable = 1;
 var secondVariable = 2;
 
@@ -267,11 +273,17 @@ var secondVariable = 2;
 var firstVariable  = 1;
 var secondVariable = 2;
 
-// acceptable as they are no assigned values
+// bad - two variables on a line
 var firstVariable, secondVariable;
+
+// good
+var firstVariable;
+var secondVariable;
 ```
 
-Assign variables at the top of their scope. This helps avoid issues with variable declaration and assignment hoisting related issues.
+Try to assign variables at the top of their scope unless it severely impacts
+readability. This helps avoid issues with variable declaration and assignment
+hoisting related issues.
 
 ```javascript
 // bad
@@ -328,7 +340,8 @@ salary = 1000;
 color = '#39ace6';
 ```
 
-Do not use obscure, abstract, abreviated, single letter variable names. Be explicit, clear and concise. Do not use the variable type in the name:
+Do not use obscure, abstract, abreviated, single letter variable names.
+Be explicit, clear and concise. Do not use the variable type in the name:
 
 ```javascript
 // bad
@@ -342,13 +355,17 @@ var dog = 'gy style';
 var dogs = [];
 ```
 
-Several exceptions exist.  When something is conventionally abbreviated (as `req` and `res` often are in web frameworks), it's ok to continue with that convention.  `args` is an acceptable, universally understood abbreviation that stands alone.  As long as you're doing *very* simple loops, `i` is an acceptable shortened version of index.
+Several exceptions exist. When something is conventionally abbreviated
+(as `req` and `res` often are in web frameworks), it's ok to continue with that
+convention. `args` is an acceptable, universally understood abbreviation that
+stands alone. As long as you're doing *very* simple loops, `i` is an acceptable
+shortened version of index.
 
 ### Case
 
 - `camelCase`: Naming functions, methods, variables, objects, instances, etc.
 - `PascalCase`: Naming constructors, prototypes, etc.
-- `rDesc`: Naming regular expressions
+- `descRegex`: Naming regular expressions
 - `SYMBOLIC_CONSTANTS`: Naming constant
 
 ### Type Casting & Coercion
@@ -386,10 +403,14 @@ var val = parseInt(inputValue);
 
 // good
 var val = Number(inputValue);
+// always use radix (10)
 var val = parseInt(inputValue, 10);
 ```
 
-If for whatever reason you are doing something wild and `parseInt` is your bottleneck and need to use Bitshift for [performance reasons](http://jsperf.com/coercion-vs-casting/3), leave a comment explaining why and what you're doing.
+If for whatever reason you are doing something wild and `parseInt` is your
+bottleneck and need to use Bitshift for
+[performance reasons](http://jsperf.com/coercion-vs-casting/3), leave a comment
+explaining why and what you're doing.
 
 ```javascript
 // parseInt was slow, so Bitshifting the String to coerce it to a Number
@@ -440,7 +461,7 @@ function sum (a, b) {}
 function sum(a,b) {}
 
 // good
-function sum(a, b) {
+function sum (a, b) {
   return a + b;
 }
 ```
@@ -453,14 +474,18 @@ Immediately-invoked function expression (IIFE):
 })();
 ```
 
-Whenever a method is non-trivial, make the effort to use a named function declaration rather than an anonymous function. This will make it easier to pinpoint the root cause of an exception when analyzing stack traces.
+Whenever a method is non-trivial, make the effort to use a named function
+declaration rather than an anonymous function. This will make it easier to
+pinpoint the root cause of an exception when analyzing stack traces.
 
 ```javascript
 // bad
 function once (fn) {
   var ran = false;
   return function () {
-    if (ran) { return };
+    if (ran) {
+      return;
+    }
     ran = true;
     fn.apply(this, arguments);
   };
@@ -470,26 +495,31 @@ function once (fn) {
 function once (fn) {
   var ran = false;
   return function run () {
-    if (ran) { return };
+    if (ran) {
+      return;
+    }
     ran = true;
     fn.apply(this, arguments);
   };
 }
 ```
 
-Do not define single line functions, let's be consistent. And whitespace is your friend:
+Do not define single line functions, let's be consistent. And whitespace is your
+friend:
 
 ```javascript
 // bad
-function sum(a, b) { return a + b; }
+function sum (a, b) { return a + b; }
 
 // good
-function sum(a, b) {
+function sum (a, b) {
   return a + b;
 }
 ```
 
-When declaring a function, always use the function declaration form instead of function expressions. Because [hoisting](http://www.adequatelygood.com/JavaScript-Scoping-and-Hoisting.html).
+When declaring a function, always use the function declaration form instead of
+function expressions. Because
+[hoisting](http://www.adequatelygood.com/JavaScript-Scoping-and-Hoisting.html).
 
 ```javascript
 // bad
@@ -498,12 +528,12 @@ var sum = function (a, b) {
 }
 
 // bad - variable name will get hoisted, not the assignment
-var sum = function sum(a, b) {
+var sum = function sum (a, b) {
   return a + b;
 }
 
 // good
-function sum(a, b) {
+function sum (a, b) {
   return a + b;
 }
 ```
@@ -530,11 +560,12 @@ if (Math.random() > 0.5) {
 }
 ```
 
-Return fast. Avoid keeping indentation levels from raising more than necessary by using guard clauses instead of flowing if statements.
+Return fast. Avoid keeping indentation levels from raising more than necessary
+by using guard clauses instead of flowing if statements.
 
 ```javascript
 // bad
-function returnLate(foo) {
+function returnLate (foo) {
   var value;
   if (foo) {
     value = 'foo';
@@ -546,7 +577,7 @@ function returnLate(foo) {
 }
 
 // good
-function returnEarly(foo) {
+function returnEarly (foo) {
   if (foo) {
     return 'foo';
   }
@@ -554,20 +585,24 @@ function returnEarly(foo) {
 }
 ```
 
-Never name a parameter arguments, this will take precedence over the arguments object that is given to every function scope.
+Never name a parameter arguments, this will take precedence over the arguments
+object that is given to every function scope.
 
 ```javascript
 // bad
-function nope(name, options, arguments) {}
+function nope (name, options, arguments) {
+}
 
 // good
-function yup(name, options, args) {}
+function yup (name, options, args) {
+}
 ```
 
-Use `||`` to define a default value. If the left-hand value is falsy then the right-hand value will be used:
+Use `||`` to define a default value. If the left-hand value is falsy then the
+right-hand value will be used:
 
 ```javascript
-function doSomething(value) {
+function doSomething (value) {
   value = value || 33;
 }
 ```
@@ -576,13 +611,18 @@ Though do not use this for booleans:
 
 ```javascript
 // bad - would set true even if value is set to false
-function doSomething(value) {
+function doSomething (value) {
   value = value || true;
 }
 
-// good - check if value is either null or undefined
-function doSomething(value) {
+// bad - not explicit
+function doSomething (value) {
   value = (value == null) ? true : value;
+}
+
+// good - check if value is either null or undefined
+function doSomething (value) {
+  value = (value === null || value === undefined) ? true : value;
 }
 ```
 
@@ -598,7 +638,9 @@ doSomething( arg1, arg2, arg3 );
 doSomething(arg1, arg2, arg3);
 ```
 
-You can chain multiple functions on a single line. If it gets too long, break it with a single method call per line. The chaining operator `.` must then be at the beginning of every subsequent method call.
+You can chain multiple functions on a single line. If it gets too long, break
+it with a single method call per line. The chaining operator `.` must then be at
+the beginning of every subsequent method call.
 
 ```javascript
 // bad - trailing doc should be on the next line
@@ -632,11 +674,14 @@ $('#items')
 
 ### On `this`
 
-Beyond the generally well known use cases of call and apply, always prefer .bind( this ) or a functional equivalent, for creating BoundFunction definitions for later invocation. Only resort to aliasing when no preferable option is available.
+Beyond the generally well known use cases of call and apply, always prefer
+`.bind(this)` or a functional equivalent, for creating BoundFunction definitions
+for later invocation. Only resort to aliasing when no preferable option is
+available.
 
 ```javascript
 // bad if it can be avoided
-function Device( opts ) {
+function Device (opts) {
   var self = this;
   this.value = null;
   stream.read(opts.path, function(data) {
@@ -645,39 +690,38 @@ function Device( opts ) {
 }
 
 // good
-function Device( opts ) {
+function Device (opts) {
   this.value = null;
-
   stream.read(opts.path, function(data) {
     this.value = data;
   }.bind(this));
 }
 ```
 
-If you need to alias `this`, use `_this`:
+If you need to alias `this`, use `self`:
 
 ```javascript
 // bad
-function() {
-  var self = this;
-  return function() {
-    console.log(self);
+function () {
+  var _this = this;
+  return function () {
+    console.log(_this);
   };
 }
 
 // bad
-function() {
+function () {
   var that = this;
-  return function() {
+  return function () {
     console.log(that);
   };
 }
 
 // good
-function() {
-  var _this = this;
-  return function() {
-    console.log(_this);
+function () {
+  var self = this;
+  return function () {
+    console.log(self);
   };
 }
 ```
@@ -690,17 +734,19 @@ jQuery.proxy()
 // ...
 ```
 
-Several prototype methods of ES 5.1 built-ins come with a special `thisArg` signature, which should be used whenever possible
+Several prototype methods of ES 5.1 built-ins come with a special `thisArg`
+signature, which should be used whenever possible
 
 ```javascript
-var obj = { f: "foo", b: "bar", q: "qux" };
+var obj = { f: 'foo', b: 'bar', q: 'qux' };
 
-Object.keys( obj ).forEach(function( key ) {
-  console.log( this[ key ] ); // <-- |this| now refers to `obj`
-}, obj ); // <-- the last arg is `thisArg`
+Object.keys(obj).forEach(function(key) {
+  console.log(this[key]); // <-- |this| now refers to `obj`
+}, obj); // <-- the last arg is `thisArg`
 ```
 
-`thisArg` can be used with `Array.prototype.every`, `Array.prototype.forEach`, `Array.prototype.some`, `Array.prototype.map`, `Array.prototype.filter`.
+`thisArg` can be used with `Array.prototype.every`, `Array.prototype.forEach`,
+`Array.prototype.some`, `Array.prototype.map`, `Array.prototype.filter`.
 
 ---
 
@@ -719,7 +765,8 @@ if (condition) {}
 if (condition) {}
 ```
 
-Brackets are enforced. Never use single line conditions. Subsequent `else` and `else if` must be on a new line:
+Brackets are enforced. Never use single line conditions. Subsequent `else`
+and `else if` must be on a new line:
 
 ```javascript
 // bad - no brackets
@@ -751,7 +798,10 @@ else {
 
 ### Ternary operators
 
-Ternary operators are fine for clear-cut conditionals, but unacceptable for confusing choices. As a rule, if you can't eye-parse it as fast as your brain can interpret the text that declares the ternary operator, chances are it's probably too complicated for its own good. Never ever nest ternary operators.
+Ternary operators are fine for clear-cut conditionals, but unacceptable for
+confusing choices. As a rule, if you can't eye-parse it as fast as your brain
+can interpret the text that declares the ternary operator, chances are it's
+probably too complicated for its own good. Never ever nest ternary operators.
 
 ```javascript
 // bad
@@ -774,7 +824,9 @@ else {
 
 ### Equality
 
-Avoid using `==` and `!=` operators, always favor `===` and `!==`. These operators are called the "strict equality operators", while their counterparts will attempt to cast the operands into the same value type.
+Avoid using `==` and `!=` operators, always favor `===` and `!==`. These
+operators are called the "strict equality operators", while their counterparts
+will attempt to cast the operands into the same value type.
 
 ```javascript
 // bad
@@ -786,7 +838,8 @@ dog === 'gy style'
 dog !== 'gy style'
 ```
 
-Conditional expressions are evaluated using coercion with the `ToBoolean` method and always follow these simple rules:
+Conditional expressions are evaluated using coercion with the `ToBoolean` method
+and always follow these simple rules:
 
 + **Objects** evaluate to **true**
 + **Undefined** evaluates to **false**
@@ -815,8 +868,8 @@ if (!array.length) {}
 
 // When only evaluating that a string is empty or not
 // good
-if (string !== "") {}
-if (string === "") {}
+if (string !== '') {}
+if (string === '') {}
 
 // but prefer
 if (string) {}
@@ -831,19 +884,20 @@ if (foo === false) {}
 if (foo) {}
 if (!foo) {}
 
-// When only evaluating a ref that might be null or undefined, but NOT false, // or 0,
+// When only evaluating a ref that might be null or undefined, but NOT false, or 0,
+// bad - not explicit
+if (foo == null) {}
+
 // good
 if (foo === null || foo === undefined) {}
-
-// but prefer
-if (foo == null) {}
 ```
 
 ---
 
 ## Arrays
 
-Use the litteral syntax for array creation unless you want to define a fixed size array:
+Use the litteral syntax for array creation unless you want to define a fixed
+size array:
 
 ```javascript
 // bad
@@ -854,7 +908,8 @@ var dogs = new Array(4);
 var dogs = [];
 ```
 
-Do not leave the trailing comma on the last item. If the array is too long, split it on multiple line, on item per line, indented with 2 spaces:
+Do not leave the trailing comma on the last item. If the array is too long,
+split it on multiple line, on item per line, indented with 2 spaces:
 
 ```javascript
 // bad - should be on multiple lines
@@ -862,7 +917,7 @@ var people = [{name: 'John'}, {name: 'Arthur'}];
 
 // bad - trailing comma
 var people = [
-  {name: 'John'}, 
+  {name: 'John'},
   {name: 'Arthur'},
 ];
 
@@ -870,7 +925,7 @@ var people = [
 var people = [{
   firstName: 'John',
   lastName: 'Doe'
-}, 
+},
 {
   firstName: 'Arthur',
   lastName: 'Doe'
@@ -878,8 +933,8 @@ var people = [{
 
 // good
 var people = [
-  {name: 'John'}, 
-  {name: 'Arthur'}
+  { name: 'John' },
+  { name: 'Arthur' }
 ];
 
 // good
@@ -887,7 +942,7 @@ var people = [
   {
     firstName: 'John',
     lastName: 'Doe'
-  }, 
+  },
   {
     firstName: 'Arthur',
     lastName: 'Doe'
@@ -927,7 +982,9 @@ itemsCopy = items.slice();
 
 ## Objects
 
-Remove trailing comma at the end of the hash. Avoid declaring single line hashes if it has more than one property. If you do, use spaces after the opening `{` and before the closing `}`:
+Remove trailing comma at the end of the hash. Avoid declaring single line hashes
+if it has more than one property. If you do, use spaces after the opening `{`
+and before the closing `}`:
 
 ```javascript
 // bad
@@ -938,7 +995,7 @@ var people = {
   lastName: 'Doe',
 };
 
-// ok 
+// good
 var people = { firstName: 'John' };
 var people = {
   firstName: 'John',
@@ -971,7 +1028,7 @@ var luke = {
   age: 28
 };
 
-function getProp(prop) {
+function getProp (prop) {
   return luke[prop];
 }
 
@@ -986,15 +1043,15 @@ var isJedi = getProp('jedi');
 // bad - inconsistent
 while(condition) iterating++;
 for(var i=0;i<100;i++) someIterativeFn();
+for (; i < 100; i++) {
+  someIterativeFn();
+}
 
 // good
 while (condition) {
   iterating++;
 }
-for (var i=0; i<100; i++) {
+for (var i = 0; i < 100; i++) {
   someIterativeFn();
 }
-
 ```
-
-
