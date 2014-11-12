@@ -628,57 +628,163 @@ Use quotation marks in URI values (url()):
 ```
 styles
 ├── base
-│   ├── text.css
-│   └── table.css
-├── config
-│   ├── colors.css
-│   └── z-index.css
+│   ├── forms.scss
+│   ├── lists.scss
+│   ├── table.scss
+│   ├── text.scss
+│   ├── colors.scss
+│   ├── fonts.scss
+│   └── z-index.scss
 ├── components
-│   ├── carousel.css
-│   └── tooltip.css
+│   ├── carousel.scss
+│   └── tooltip.scss
 ├── layouts
-│   ├── page.css
-│   ├── page-body.css
-│   ├── page-foot.css
-│   ├── page-head.css
-│   └── page-sidebar.css
+│   ├── page.scss
+│   ├── page-body.scss
+│   ├── page-foot.scss
+│   ├── page-head.scss
+│   └── page-sidebar.scss
 ├── shared
-│   └── helper.css
+│   └── helper.scss
 ├── vendors
-│   └── select2.css
+│   └── select2.scss
 └── views
-    ├── home.css
-    └── contact.css
+    ├── home.scss
+    └── contact.scss
+```
+
+### Base
+
+The goal is to define a consistent foundation across browsers to build the site on. So we normalize those elements in the `base/` folder. We use [normalize](http://necolas.github.io/normalize.css/) as a starting point and build on top of it to define the default look we want to give to elements:
+
+- `forms.scss`: anything related to forms
+- `lists.scss`: anything related to lists (ol, ul , dl)
+- `tables.scss`: anything related to tables
+- `text.scss`: anything related to headings and paragraphs
+
+The rule is that you can't define rule declarations with a class or id. You must use html tags only:
+
+```css
+/* bad */
+.paragraph {}
+
+/* good */
+p {}
+```
+
+The only exception is if you want to create a class named after an html attribute that reproduces it's behaviour:
+
+```css
+strong,
+.strong {
+  font-weight: bold;
+}
+```
+
+The `base/` folder also welcome configuration for your project:
+
+- `colors.scss`: the color scale
+- `fonts.scss`: the font families used in the app
+- `zindex.scss`: the zindex scale
+
+### Layouts
+
+If you consider a page, there always big structural parts like a `header`, a `foot`, a `body`, a `sidebar`... The layout folder host style for those high level elements. As a convention, we prefix those elements with the `page-` prefix:
+
+- `page.scss`: style the viewport `body`, `html`
+- `page-head.scss`: style the header `.page-head`
+- `page-body.scss`: style the body `.page-body`
+- `page-foot.scss`: style the footer `.page-foot`
+- `page-sidebar.scss`: style the sidebar `.page-sidebar`
+- ...
+
+The list will depend on your page layout.
+
+The `layout/` folder let you define multiple layouts for those elements. For instance, you may want to have both a fixed and fluid layout. You would then create two classes that could be applied to the body html tag `body.layout-fluid` and `body.layout-fixed`.
+
+```css
+.page-body {
+  width: 960px;
+  margin: 0 auto;
+}
+
+.layout-fluid .page-body {
+  width: 100%;
+  margin: 0;
+}
 ```
 
 ### Componentizing
 
-Always look to abstract components. Medium has a very strong, very consistent style and the reuse of components across designs helps to improve this consistency at an implementation level.
+Always look to abstract components. Everytime you style an element, ask yourself if it could be reused in another context (chances are it could!). If so, then it is a component. Exemple of good candidates for components are `buttons`, `forms`, `navigations`, `user profile`...
 
-A name like `.homepage-nav` limits its use. Instead think about writing styles in such a way that they can be reused in other parts of the app. Instead of `.homepage-nav`, try instead `.nav` or `.nav-bar`. Ask yourself if this component could be reused in another context (chances are it could!).
+Every component should be stored in its own `file.scss`.
 
-Components should belong to their own less file. For example, all general button definitions should belong in buttons.less.
+#### Naming
 
-## Name-spacing
-
-Name-spacing is great! But it should be done at a component level â€“ never at a page level.
-
-Also, namespacing should be made at a descriptive, functional level. Not at a page location level. For example, `.profile-header` could become `.header-hero-unit`.
-
-**Wrong:**
+Name-spacing is great! But it should be done at a component level - never at a page level. Also, namespacing should be made at a descriptive, functional level. Not at a page location level. For example, `.profile-header` could become `.header-hero-unit`.
 
 ```css
-.nav,
-.home-nav,
-.profile-nav,
+/* bad */
+.home-nav {}
+.profile-nav {}
+
+/* good */
+.nav-bar {}
+.nav-list {}
 ```
 
-**Right:**
+Do not style html selectors, instead try to provoid semantic classes:
+
+**Bad**
+
+```html
+<div class="profile">
+  <span>Name</span>
+  <span>Developer</span>
+</div>
+```
 
 ```css
-.nav,
-.nav-bar,
-.nav-list
+.profile span:first-child {}
+.profile span:last-child {}
+```
+
+**Good**
+
+```html
+<div class="profile">
+  <span class="profile-name">Name</span>
+  <span class="profile-developer">Developer</span>
+</div>
+```
+
+```css
+.profile .profile-name {}
+.profile .profile-developer {}
+```
+
+#### Sub classing
+
+If you need to make a variation of a component, try to factorize as much as possible into a common component and create new classes for the variations:
+
+```css
+.button {
+  border-radius: 2px;
+}
+.button-primary {
+    backgroucolor: #20ff2a;
+}
+.button-secondary {
+    backgroucolor: #4059ff;
+}
+```
+
+Then you can use them along side:
+
+```html
+<a href="#" class="button button-primary">Primary Button</a>
+<a href="#" class="button button-secondary">Secondary Button</a>
 ```
 
 ## Style Scoping
