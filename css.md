@@ -76,7 +76,8 @@ Always add a semicolon at the end of a property declaration, even if it is the l
 
 ### Type Selectors
 
-Unless necessary (for example with helper classes), do not use element names in conjunction with IDs or classes:
+Unless necessary (for example with helper classes), do not use element names in
+conjunction with IDs (which you're not supposed to use anyway) or classes:
 
 ```css
 /* bad */
@@ -208,13 +209,15 @@ For properties with multiple values, separate each value with a single space fol
 font-family: Helvetica, sans-serif;
 ```
 
-If a single value contains any spaces, that value must be enclosed within double quotation marks:
+If a single value contains any spaces, that value must be enclosed within single quotation marks:
 
 ```
-font-family: "Lucida Grande", Helvetica, sans-serif;
+font-family: 'Lucida Grande', Helvetica, sans-serif;
 ```
 
-Long, comma-separated property values - such as collections of gradients or shadows - can be arranged across multiple lines in an effort to improve readability and produce more useful diffs. There are various formats that could be used; one example is shown below.
+Long, comma-separated property values - such as collections of gradients or
+shadows - can be arranged across multiple lines in an effort to improve
+readability and produce more useful diffs:
 
 ```css
 .foo {
@@ -251,16 +254,18 @@ Smaller teams may prefer to cluster related properties (e.g. positioning and box
     width: 100px;
     height: 100px;
 
-    /* Other */
+    /* Visual Styling */
     background: #000;
+    border-radius: 8px;
+    box-shadow: 0 0 8px #000;
+
+    /* Text / Font */
     color: #fff;
     font-family: sans-serif;
     font-size: 16px;
     text-align: right;
 }
 ```
-
-Larger teams may prefer the simplicity and ease-of-maintenance that comes with alphabetical ordering.
 
 ### Nesting
 
@@ -286,53 +291,23 @@ html {
 }
 ```
 
-Limit nesting to 1 level deep. Reassess any nesting more than 2 levels deep. This prevents overly-specific CSS selectors.
+Try to limit nesting to 1 level deep. Reassess any nesting more than 2 levels
+deep. This prevents overly-specific CSS selectors.
 
-Avoid large numbers of nested rules. Break them up when readability starts to be affected. Preference to avoid nesting that spreads over more than 20 lines.
-
-OR ????
-
-Don't nest. Ever.
-
-Nesting makes it harder to tell at a glance where css selector optimizations can be made.
-
-```css
-/* bad */
-.list-btn {
-  .list-btn-inner {
-    .btn {
-      background: red;
-    }
-    .btn:hover {
-      .opacity(.4);
-    }
-  }
-}
-
-/* good */
-.list-btn .btn-inner {
-  background: red;
-}
-.list-btn .btn-inner:hover {
-  .opacity(.4);
-}
-```
-
-??? Could we nest states ? Like `hover` 
+Avoid large numbers of nested rules. Break them up when readability starts to
+be affected. Preference to avoid nesting that spreads over more than 20 lines.
 
 ---
 
 ## Comments
 
-Use `/* */` for comment blocks (instead of `//`).
+Use `/* */` for comment blocks (instead of `//`). Always use valid Markdown.
 
 ### Code blocks
 
-```css
-/* ==========================================================================
-   Section comment block
-   ========================================================================== */
+**Bad**
 
+```css
 /* Sub-section comment block
    ========================================================================== */
 
@@ -342,11 +317,24 @@ Use `/* */` for comment blocks (instead of `//`).
  **********************/
 ```
 
+**Good**
+
+```css
+/** Section comment block
+ *  ===================== */
+
+/** Section comment block
+ *  =====================
+ *
+ *  This is some stuff for some stuff.
+ */
+```
+
 ### HTML description
 
 Consider the following html:
 
-```
+```html
 <div class="carousel">
     <ul class="panes">
         <li class="pane">
@@ -359,11 +347,12 @@ Consider the following html:
 </div>
 ```
 
-When you style the `.carousel`, comment the html structure:
+When you style the `.carousel`, as it is a resuable component, document the html
+structure:
 
-```
-/**
- * .carousel
+```css
+/** .carousel
+ *  =========
  *
  * The first sentence of the long description starts here and continues on this
  * line for a while finally concluding here at the end of this paragraph.
@@ -404,11 +393,14 @@ Use dashes to separate multi word selector:
 .foo-bar
 ```
 
-### Component
+### Components
 
-In large projects as well as for code that gets embedded in other projects or on external sites use prefixes (as namespaces) for class names. Use short, unique identifiers followed by a dash.
+In large projects as well as for code that gets embedded in other projects or on
+external sites use prefixes (as namespaces) for class names. Use short, unique
+identifiers followed by a dash.
 
-Using namespaces helps preventing naming conflicts and can make maintenance easier, for example in search and replace operations.
+Using namespaces helps preventing naming conflicts and can make maintenance
+easier, for example in search and replace operations.
 
 ### State classes
 
@@ -416,25 +408,33 @@ If you want to define a class that describes a state, prefix it with `is-`.
 
 ### Javascript classes
 
-Using css classes for both Javascript action and styling is highly error prone. There should be no coupling between actions and styling. If you define a class to make the element actionable via Javascript, prefix the class with `js-`. 
+Using css classes for both Javascript action and styling is highly error prone.
+There should be no coupling between actions and styling. If you define a class
+to make the element actionable via Javascript, prefix the class with `js-`.
 
 ```
 .js-nav-open
 ```
 
-That class should not be used for styling at all. If you need to style the element, add another classname without the prefix and style the one without the prefix:
+That class should not be used for styling at all. If you need to style the
+element, add another classname without the prefix and style the one without the
+prefix:
 
 ```
 .js-nav-open.nav-open
 ```
 
-Hint: We don't use `data-` attributes to handle actions instead of mixing styling classes and action classes because of [performance](http://jsperf.com/data-selector-performance-without-values).
+Hint: We don't use `data-` attributes to handle actions instead of mixing
+styling classes and action classes because of
+[performance](http://jsperf.com/data-selector-performance-without-values).
 
 ---
 
 ## Units
 
-When denoting the dimensions — that is, the width or height — of an element or its margins, borders, or padding, specify the units in either `em`, `px`, or `%`. If the value is 0, do not specify units.
+When denoting the dimensions — that is, the width or height — of an element or
+its margins, borders, or padding, specify the units in either `em`, `px`,
+or `%`. If the value is 0, do not specify units.
 
 ```
 /* bad - no unit */
@@ -454,19 +454,22 @@ width: 0;
 
 ### Leading 0s
 
-Do not use put 0s in front of values or lengths between -1 and 1.
+Always put 0s in front of values or lengths between -1 and 1.
 
 ```
 /* bad */
-font-size: 0.8em;
+font-size: .8em;
 
 /* good */
-font-size: .8em;
+font-size: 0.8em;
 ```
 
 ### Pixels vs ems vs rems
 
-Use px for font-size, because it offers absolute control over text. Additionally, unit-less line-height is preferred because it does not inherit a percentage value of its parent element, but instead is based on a multiplier of the font-size.
+Use px for font-size, because it offers absolute control over text.
+Additionally, unitless line-height is preferred because it does not inherit
+a percentage value of its parent element, but instead is based on a multiplier
+of the font-size.
 
 ---
 
@@ -492,10 +495,6 @@ bg-home.jpg
 sprite-top-navigation.png
 ```
 
-We sprite
-
-Fonts
-
 ---
 
 ## Colors
@@ -511,89 +510,82 @@ color: hsla(120, 100%, 50%, 1);
 
 /* good */
 color: #FFF;
-color: rgba(255, 255, 255, .8);
+color: rgba(255, 255, 255, 0.8);
 ```
 
-When denoting color using hexadecimal notation, use all capital letters. Both three-digit and six-digit hexadecimal notation are acceptable; if it’s possible to specify the desired color using three-digit hexadecimal notation, do so as you’ll save the end-user a few bytes of download time.
+When denoting color using hexadecimal notation, use all lowercase letters. Both
+three-digit and six-digit hexadecimal notation are acceptable; if it’s possible
+to specify the desired color using three-digit hexadecimal notation, do so.
 
 ```
-/* bad - lowercase */
-color: #fff;
+/* bad - uppercase */
+color: #FFF;
 
 /* bad - use short version */
-color: #FFFFFF;
+color: #ffffff;
 
 /* good */
-color: #FE9848;
-color: #FFF;
+color: #fe9848;
+color: #fff;
 ```
 
-Also avoid to define colors directly in the code. Instead use color variable defined in `colors.scss`.
-
-```
-
-```
+Also avoid defining colors directly in the code. Instead use color variable
+defined in `colors.scss`.
 
 ---
 
 ## Fonts
 
-With the additional support of web fonts `font-weight` plays a more important role than it once did. Different font weights will render typefaces specifically created for that weight, unlike the old days where `bold` could be just an algorithm to fatten a typeface. Obvious uses the numerical value of `font-weight` to enable the best representation of a typeface. The following table is a guide:
+Refer to type.less for type size, letter-spacing, and line height. Raw sizes,
+spaces, and line heights should be avoided outside of `_type.scss`.
 
-Raw font weights should not be specified. Instead, use the appropriate font mixin: `.wf-sans-i7, .wf-sans-n7, etc.`
-
-The suffix defines the weight and style:
-
-```CSS
-n = normal
-i = italic
-4 = normal font-weight
-7 = bold font-weight
-```
-
-Refer to type.less for type size, letter-spacing, and line height. Raw sizes, spaces, and line heights should be avoided outside of type.less.
-
+Use the following naming for font-size abstraction:
 
 ```
-$type-micro
-$type-smallest
-$type-smaller
-$type-small
-$type-base
-$type-large
-$type-larger
-$type-largest
-$type-jumbo
+type-xx-small
+type-x-small
+type-small
+type-normal
+type-large
+type-x-large
+type-xx-large
 ```
 
 ---
 
 ## z-index
 
-We don't want a `z-index` of 10000000. Actually if you find yourself entering a numeric value for `z-index`, you are doing something wrong. We have a scale of 10 `z-index` variables ranging from 100 to 1000. This scale is not to be touched.
+We don't want a `z-index` of 10000000. Actually if you find yourself entering a
+numeric value for `z-index`, you are doing something wrong. We have a scale of
+10 `z-index` variables ranging from 100 to 1000. This scale is not to be
+touched.
 
-Now if you want to create a component and need to position it, you create a `$zIndex-1--carousel` variable in the `z-index.scss` file and position it where it belongs. This file give you a quick glance of the application structure and how things are organized relatively.
+Now if you want to create a component and need to position it, you create a
+`$zIndex-1--carousle` variable in the `z-index.scss` file and position it where
+it belongs. This file give you a quick glance of the application structure and
+how things are organized relatively.
 
 ```
-// z-index Scale (do not edit)
-// --------------------------------------------------
-$zIndex-1:   100;
-$zIndex-2:   200;
-$zIndex-3:   300;
-$zIndex-4:   400;
-$zIndex-5:   500;
-$zIndex-6:   600;
-$zIndex-7:   700;
-$zIndex-8:   800;
-$zIndex-9:   900;
-$zIndex-10: 1000;
+/** z-index Scale (do not edit)
+ *  =========================== */
+$z-index-1  : 100;
+$z-index-2  : 200;
+$z-index-3  : 300;
+$z-index-4  : 400;
+$z-index-5  : 500;
+$z-index-6  : 600;
+$z-index-7  : 700;
+$z-index-8  : 800;
+$z-index-9  : 900;
+$z-index-10 : 1000;
 
 
-// z-index Applications
-// --------------------------------------------------
-$zIndex-1--something:               @zIndex-1;
+/** z-index Applications
+ *  ==================== */
+$z-index-1-something     : $z-index-1;
 
-$zIndex-2--component:               @zIndex-2;
+$z-index-2-something     : $z-index-2;
+$z-index-2-somethingElse : $z-index-2;
 ```
 
 ---
@@ -610,18 +602,18 @@ background: url(http://www.exemple.com);
 background: url(//www.google.com);
 ```
 
-Use quotation marks in URI values (url()):
+Do not use quotation marks in URI values (url()):
 
 ```
 /* bad */
-@import url(//www.exemple.com);
+@import url('//www.exemple.com');
 @import url("//www.exemple.com");
 
 /* good */
-@import url('//www.exemple.com');
+@import url(//www.exemple.com);
 ```
 
---- 
+---
 
 ## File structure
 
@@ -653,17 +645,26 @@ styles
 
 ### Componentizing
 
-Always look to abstract components. Medium has a very strong, very consistent style and the reuse of components across designs helps to improve this consistency at an implementation level.
+Always look to abstract components. Medium has a very strong, very consistent
+style and the reuse of components across designs helps to improve this
+consistency at an implementation level.
 
-A name like `.homepage-nav` limits its use. Instead think about writing styles in such a way that they can be reused in other parts of the app. Instead of `.homepage-nav`, try instead `.nav` or `.nav-bar`. Ask yourself if this component could be reused in another context (chances are it could!).
+A name like `.homepage-nav` limits its use. Instead think about writing styles
+in such a way that they can be reused in other parts of the app. Instead of
+`.homepage-nav`, try instead `.nav` or `.nav-bar`. Ask yourself if this
+component could be reused in another context (chances are it could!).
 
-Components should belong to their own less file. For example, all general button definitions should belong in buttons.less.
+Components should belong to their own less file. For example, all general button
+definitions should belong in buttons.less.
 
 ## Name-spacing
 
-Name-spacing is great! But it should be done at a component level â€“ never at a page level.
+Name-spacing is great! But it should be done at a component level â€“ never at a
+page level.
 
-Also, namespacing should be made at a descriptive, functional level. Not at a page location level. For example, `.profile-header` could become `.header-hero-unit`.
+Also, namespacing should be made at a descriptive, functional level. Not at a
+page location level. For example, `.profile-header` could become
+`.header-hero-unit`.
 
 **Wrong:**
 
@@ -683,7 +684,9 @@ Also, namespacing should be made at a descriptive, functional level. Not at a pa
 
 ## Style Scoping
 
-Medium pages should largely be reusing the general component level styles defined above. Page level name-spaces however can be helpful for overriding generic components in very specific contexts.
+Medium pages should largely be reusing the general component level styles
+defined above. Page level name-spaces however can be helpful for overriding
+generic components in very specific contexts.
 
 Page level overrides should be minimal and under a single page level class nest.
 
@@ -697,7 +700,10 @@ Page level overrides should be minimal and under a single page level class nest.
 
 ### Mixins
 
-Make sure to take into consideration the output of using LESS' powerful mixins. They are best used for grouping browser-specific code or as powerful ways to contain functionality. They are not a good way to add additional styles to an element as you will be sending duplicate styles across the wire.
+Make sure to take into consideration the output of using LESS' powerful mixins.
+They are best used for grouping browser-specific code or as powerful ways to
+contain functionality. They are not a good way to add additional styles to an
+element as you will be sending duplicate styles across the wire.
 
 **Wrong:**
 
