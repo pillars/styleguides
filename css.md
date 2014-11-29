@@ -1,3 +1,8 @@
+NEVER OVERWRITE VENDOR FILES!!!
+bitter in base
+
+
+
 # CSS Style Guide
 
 All code in any code-base should look like a single person typed it, no matter how many people contributed.
@@ -15,9 +20,13 @@ This guide is inspired by those guides:
 
 ## Table of Contents
 
-- [Convention](#conventions)
-- [Strings](#strings)
+- [Conventions](#conventions)
 - [Comments](#comments)
+- [Units](#units)
+- [Colors](#colors)
+- [Fonts](#fonts)
+- [ZIndex](#zindex)
+- [File structure](#file-structure)
 
 ---
 
@@ -74,6 +83,10 @@ Always add a semicolon at the end of a property declaration, even if it is the l
 }
 ```
 
+### This is not `!important`
+
+Don't rely on using `!important` to override styles. Either make the styles to be overridden more generic or make the overriding styles more specific.
+
 ### Type Selectors
 
 Unless necessary (for example with helper classes), do not use element names in
@@ -91,33 +104,35 @@ ul.foo {}
 
 CSS offers a variety of [shorthand](http://www.w3.org/TR/CSS21/about.html#shorthand) properties (like font) that should be used whenever possible, even in cases where only one value is explicitly set:
 
-```
+```css
 /* bad */
-border-top-style: none;
-font-family: palatino, georgia, serif;
-font-size: 100%;
-line-height: 1.6;
-padding-bottom: 2em;
-padding-left: 1em;
-padding-right: 1em;
-padding-top: 0;
+selector {
+  border-top-style: none;
+  font-family: palatino, georgia, serif;
+  font-size: 100%;
+  line-height: 1.6;
+  padding-bottom: 2em;
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-top: 0;
+}
 
 /* good */
-border-top: 0;
-font: 100%/1.6 palatino, georgia, serif;
-padding: 0 1em 2em;
+selector {
+  border-top: 0;
+  font: 100%/1.6 palatino, georgia, serif;
+  padding: 0 1em 2em;
+}
 ```
 
 ### Whitespaces
-
-#### Base rules:
 
 - Use 2 spaces (soft tabs). Never use tabs.
 - Line length must never exceed **80 characters**.
 - File must end with a **single** new line.
 - Trailing whitespaces must be trimmed.
 
-#### Spaces
+And for the syntax of rule declarations:
 
 - Avoid single line rule declarations.
 - Add a semicolon after every property declarations.
@@ -201,6 +216,90 @@ padding: 0 1em 2em;
 }
 ```
 
+### Naming
+
+Class names and attributes must be lowercase:
+
+```css
+/* bad */
+.P {}
+.Foo{}
+
+/* good */
+p {}
+.foo {}
+```
+
+Use dashes to separate multi word selector:
+
+```css
+/* bad */
+.foobar {}
+.fooBar {}
+.FooBar {}
+.foo_bar {}
+
+/* good */
+.foo-bar {}
+```
+
+#### Components
+
+In large projects as well as for code that gets embedded in other projects or on
+external sites use prefixes (as namespaces) for class names. Use short, unique
+identifiers followed by a dash.
+
+Using namespaces helps preventing naming conflicts and can make maintenance
+easier, for example in search and replace operations.
+
+#### State classes
+
+If you want to define a class that describes a state, prefix it with `is-`.
+
+#### Javascript classes
+
+Using css classes for both Javascript action and styling is highly error prone.
+There should be no coupling between actions and styling. If you define a class
+to make the element actionable via Javascript, prefix the class with `js-`.
+
+```css
+.js-nav-open {}
+```
+
+That class should not be used for styling at all. If you need to style the
+element, add another classname without the prefix and style the one without the
+prefix:
+
+```css 
+.js-nav-open.nav-open {}
+```
+
+Hint: We don't use `data-` attributes to handle actions instead of mixing
+styling classes and action classes because of
+[performance](http://jsperf.com/data-selector-performance-without-values).
+
+#### Images
+
+Name images the same way you name selectors:
+
+```
+/* bad */
+iconhome.png
+iconHome.png
+icon_home.png
+
+/* good */
+icon-home.png
+```
+
+Images must be prefixed with their usage:
+
+```
+icon-home.png
+bg-home.jpg
+sprite-top-navigation.png
+```
+
 ### Multi values properties
 
 For properties with multiple values, separate each value with a single space following the comma(s).
@@ -232,38 +331,44 @@ readability and produce more useful diffs:
 
 ### Rule order
 
-Smaller teams may prefer to cluster related properties (e.g. positioning and box-model) together.
+Group related properties (e.g. positioning and box-model) together like shown below. Include mixins at the top of the section it belongs to. 
 
 ```css
 .selector {
     /* Positioning */
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 10;
+    float:;
+    clear:;
+    position:;
+    top:;
+    right:;
+    bottom:;
+    left:;
+    z-index:;
 
     /* Display & Box Model */
-    border: 10px solid #333;
-    box-sizing: border-box;
-    display: inline-block;
-    margin: 10px;
-    padding: 10px;
-    overflow: hidden;
-    width: 100px;
-    height: 100px;
+    border:;
+    box-sizing:;
+    display:;
+    margin:;
+    padding:;
+    overflow:;
+    width:;
+    height:;
 
     /* Visual Styling */
-    background: #000;
-    border-radius: 8px;
-    box-shadow: 0 0 8px #000;
+    background:;
+    border-radius:;
+    box-shadow:;
+    content:;
 
     /* Text / Font */
-    color: #fff;
-    font-family: sans-serif;
-    font-size: 16px;
-    text-align: right;
+    color:;
+    font:;
+    line-height:;
+    text-align:;
+
+    /* Transitions */
+    transitions:;
 }
 ```
 
@@ -296,6 +401,29 @@ deep. This prevents overly-specific CSS selectors.
 
 Avoid large numbers of nested rules. Break them up when readability starts to
 be affected. Preference to avoid nesting that spreads over more than 20 lines.
+
+### URLs
+
+Do not set the protocol on URLs:
+
+```css
+/* bad */
+background: url(http://www.exemple.com);
+
+/* good */
+background: url(//www.google.com);
+```
+
+Do not use quotation marks in URI values (url()):
+
+```
+/* bad */
+@import url('//www.exemple.com');
+@import url("//www.exemple.com");
+
+/* good */
+@import url(//www.exemple.com);
+```
 
 ---
 
@@ -366,70 +494,6 @@ structure:
 
 ---
 
-## Naming
-
-Class names and attributes must be lowercase:
-
-```css
-/* bad */
-.P {}
-.Foo{}
-
-/* good */
-p {}
-.foo {}
-```
-
-Use dashes to separate multi word selector:
-
-```
-/* bad */
-.foobar
-.fooBar
-.FooBar
-.foo_bar
-
-/* good */
-.foo-bar
-```
-
-### Components
-
-In large projects as well as for code that gets embedded in other projects or on
-external sites use prefixes (as namespaces) for class names. Use short, unique
-identifiers followed by a dash.
-
-Using namespaces helps preventing naming conflicts and can make maintenance
-easier, for example in search and replace operations.
-
-### State classes
-
-If you want to define a class that describes a state, prefix it with `is-`.
-
-### Javascript classes
-
-Using css classes for both Javascript action and styling is highly error prone.
-There should be no coupling between actions and styling. If you define a class
-to make the element actionable via Javascript, prefix the class with `js-`.
-
-```
-.js-nav-open
-```
-
-That class should not be used for styling at all. If you need to style the
-element, add another classname without the prefix and style the one without the
-prefix:
-
-```
-.js-nav-open.nav-open
-```
-
-Hint: We don't use `data-` attributes to handle actions instead of mixing
-styling classes and action classes because of
-[performance](http://jsperf.com/data-selector-performance-without-values).
-
----
-
 ## Units
 
 When denoting the dimensions — that is, the width or height — of an element or
@@ -451,7 +515,6 @@ width: 12rem;
 width: 0;
 ```
 
-
 ### Leading 0s
 
 Always put 0s in front of values or lengths between -1 and 1.
@@ -470,30 +533,6 @@ Use px for font-size, because it offers absolute control over text.
 Additionally, unitless line-height is preferred because it does not inherit
 a percentage value of its parent element, but instead is based on a multiplier
 of the font-size.
-
----
-
-## Images
-
-Name images the same way you name selectors:
-
-```
-/* bad */
-iconhome.png
-iconHome.png
-icon_home.png
-
-/* good */
-icon-home.png
-```
-
-Images must be prefixed with their usage:
-
-```
-icon-home.png
-bg-home.jpg
-sprite-top-navigation.png
-```
 
 ---
 
@@ -553,7 +592,7 @@ type-xx-large
 
 ---
 
-## z-index
+## ZIndex
 
 We don't want a `z-index` of 10000000. Actually if you find yourself entering a
 numeric value for `z-index`, you are doing something wrong. We have a scale of
@@ -590,32 +629,9 @@ $z-index-2-somethingElse : $z-index-2;
 
 ---
 
-## URLs
-
-Do not set the protocol on URLs:
-
-```css
-/* bad */
-background: url(http://www.exemple.com);
-
-/* good */
-background: url(//www.google.com);
-```
-
-Do not use quotation marks in URI values (url()):
-
-```
-/* bad */
-@import url('//www.exemple.com');
-@import url("//www.exemple.com");
-
-/* good */
-@import url(//www.exemple.com);
-```
-
----
-
 ## File structure
+
+The project uses the following technologies: SASS, Bourbon and Bitters, Normalize.
 
 ```
 styles
@@ -637,13 +653,32 @@ styles
 │   ├── page-head.scss
 │   └── page-sidebar.scss
 ├── shared
-│   └── helper.scss
+│   ├── buttons.scss
+│   ├── clearfix.scss
+│   └── hide-text.scss
+├── variables
+│   ├── colors.scss
+│   ├── type.scss
+│   └── zindex.scss
 ├── vendors
-│   └── select2.scss
+│   ├── bourbon/
+│   └── normalize.scss
 └── views
     ├── home.scss
     └── contact.scss
 ```
+
+### Variables
+
+The `variables/` folder welcomes configuration for your project:
+
+- `colors.scss`: the color scale
+- `fonts.scss`: the font families used in the app
+- `zindex.scss`: the zindex scale
+
+### Shared
+
+The `shared/` folder welcomes mixins and placeholders for your project. Theses could be used anywhere in the application styles.
 
 ### Base
 
@@ -673,12 +708,6 @@ strong,
 }
 ```
 
-The `base/` folder also welcome configuration for your project:
-
-- `colors.scss`: the color scale
-- `fonts.scss`: the font families used in the app
-- `zindex.scss`: the zindex scale
-
 ### Layouts
 
 If you consider a page, there always big structural parts like a `header`, a `foot`, a `body`, a `sidebar`... The layout folder host style for those high level elements. As a convention, we prefix those elements with the `page-` prefix:
@@ -706,30 +735,14 @@ The `layout/` folder let you define multiple layouts for those elements. For ins
 }
 ```
 
-### Componentizing
+### Components
 
-Always look to abstract components. Medium has a very strong, very consistent
-style and the reuse of components across designs helps to improve this
-consistency at an implementation level.
-
-A name like `.homepage-nav` limits its use. Instead think about writing styles
-in such a way that they can be reused in other parts of the app. Instead of
-`.homepage-nav`, try instead `.nav` or `.nav-bar`. Ask yourself if this
-component could be reused in another context (chances are it could!).
-
-Components should belong to their own less file. For example, all general button
-definitions should belong in buttons.less.
-
-Every component should be stored in its own `file.scss`.
+Always look to abstract components. A name like `.homepage-nav` limits its use. Instead think about writing styles in such a way that they can be reused in other parts of the app. Instead of `.homepage-nav`, try instead `.nav` or `.nav-bar`. Ask yourself if this component could be reused in another context (chances are it could!). Every component should be stored in its own `file.scss`.
 
 #### Naming
 
-Name-spacing is great! But it should be done at a component level â€“ never at a
-page level.
-
-Also, namespacing should be made at a descriptive, functional level. Not at a
-page location level. For example, `.profile-header` could become
-`.header-hero-unit`.
+Name-spacing is great! But it should be done at a component level, never at a page level. It should be made at a descriptive, functional level. Not at a
+page location level. It means that `sidebar`, `homepage` and similar keywords should be avoided. 
 
 ```css
 /* bad */
@@ -741,7 +754,7 @@ page location level. For example, `.profile-header` could become
 .nav-list {}
 ```
 
-Do not style html selectors, instead try to provoid semantic classes:
+Also, do not style html selectors, instead try to provoid semantic classes:
 
 **Bad**
 
@@ -794,117 +807,14 @@ Then you can use them along side:
 <a href="#" class="button button-secondary">Secondary Button</a>
 ```
 
-## Style Scoping
+### Views
 
-Medium pages should largely be reusing the general component level styles
-defined above. Page level name-spaces however can be helpful for overriding
-generic components in very specific contexts.
+Page level name-spaces can be helpful for overriding generic components in very specific contexts. It is a last resort, when it doesn't make sense to create a component for it. Page level overrides should be minimal and under a single page level class nest.
 
-Page level overrides should be minimal and under a single page level class nest.
-
-```CSS
+```css
 .home-page {
   .nav {
     margin-top: 10px;
   }
-}
-```
-
-### Mixins
-
-Make sure to take into consideration the output of using LESS' powerful mixins.
-They are best used for grouping browser-specific code or as powerful ways to
-contain functionality. They are not a good way to add additional styles to an
-element as you will be sending duplicate styles across the wire.
-
-**Wrong:**
-
-```html
-<button class="btn-secondary">Click me</button>
-```
-
-```css
-.btn-primary {
-  color: red;
-  background: black;
-  width: 120px;
-  height: 60px
-  border-radius: 6px
-}
-.btn-secondary {
-  .btn-primary;
-  color: green;
-}
-.btn-disabled {
-  .btn-primary;
-  color: gray;
-  background: darkgray;
-}
-```
-
-Generated Output:
-```css
-.btn-primary {
-  color: red;
-  background: black;
-  width: 120px;
-  height: 60px
-  border-radius: 6px
-}
-.btn-secondary {
-  color: red;
-  background: black;
-  width: 120px;
-  height: 60px
-  border-radius: 6px
-  color: green;
-}
-.btn-disabled {
-  color: red;
-  background: black;
-  width: 120px;
-  height: 60px
-  border-radius: 6px
-  color: gray;
-  background: darkgray;
-}
-```
-
-**Right:**
-
-```html
-<button class="btn btn-secondary">Click me</button>
-```
-
-```css
-.btn {
-  width: 120px;
-  height: 60px
-  border-radius: 6px
-}
-.btn-primary {
-  color: red;
-  background: black;
-}
-.btn-disabled {
-  color: gray;
-  background: darkgray;
-}
-```
-
-Generated Output:
-```css
-.btn {
-  width: 120px;
-  height: 60px
-  border-radius: 6px
-}
-.btn-primary {
-  color: red;
-  background: black;
-}
-.btn-disabled {
-  color: gray;
-  background: darkgray;
 }
 ```
