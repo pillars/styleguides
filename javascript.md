@@ -203,11 +203,12 @@ Commenting out entire blocks of code should be avoided entirely, that's why you 
 
 ### Comments annotations
 
-You can use comments to add annotations to the code. Use a COMMAND capitalized, followed with a colon `: ` and the description. May the comment be longer than 80 characters, break it on multiple lines and indent the subsequent lines with two spaces:
+You can use comments to add annotations to the code. Use a COMMAND capitalized and touching the comment lines, followed with a colon `: ` and the description. May the comment be longer than 80 characters, break it on multiple lines and indent the subsequent lines with two spaces:
 
 ```javascript
-// FIXME: This has crashed occasionally since v3.2.1. It may
+//FIXME: This has crashed occasionally since v3.2.1. It may
 //   be related to the library bla.
+//TODO: make sure TODO touches comment lines for easier searching
 ```
 
 The authorized verbs are:
